@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aviator Game Simulation</title>
+    <script>
+        function simulateGame() {
+            let multiplier = 1.0;
+            const crashPoint = Math.random() * 9.0 + 1.0;
+            const data = [];
+            while (multiplier < crashPoint) {
+                data.push(multiplier);
+                multiplier += Math.random() * 0.1;
+            }
+            data.push('CRASH');
+            return data;
+        }
+
+        function getAverageCrashPoint() {
+            const games = 100;
+            let total = 0;
+            for (let i = 0; i < games; i++) {
+                const gameData = simulateGame();
+                const lastMultiplier = gameData[gameData.length - 2];
+                total += lastMultiplier;
+            }
+            return total / games;
+        }
+
+        const averageCrashPoint = getAverageCrashPoint();
+
+        function predict() {
+            const gameData = simulateGame();
+            const prediction = parseFloat(gameData[gameData.length - 2]) >= averageCrashPoint ? 'CASH OUT' : 'KEEP BETTING';
+            return { prediction, gameData };
+        }
+
+        function startGame() {
+            const result = predict();
+            document.getElementById('result').innerText = `Prediction: ${result.prediction}\nGame Data: ${result.gameData.join(', ')}`;
+        }
+    </script>
+</head>
+<body>
+    <button onclick="startGame()">Start Game</button>
+    <p id="result">Result will be displayed here.</p>
+</body>
+</html>
